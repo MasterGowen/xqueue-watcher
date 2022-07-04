@@ -144,6 +144,11 @@ class JailedGrader(Grader):
         # Run the official answer, to get the expected output.
         expected_ok = False
         expected_exc = None
+
+        self.log.info(f"{grader_path} - {processed_answer} -  {seed}")
+        expected_outputs = self._run(grader_path, processed_answer, seed).stdout
+
+
         try:
             # If we want a factor of two speedup for now: trust the staff solution to
             # avoid hitting the sandbox. (change run to run_trusted)
