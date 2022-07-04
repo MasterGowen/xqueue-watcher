@@ -123,6 +123,8 @@ class JailedGrader(Grader):
         # sys.path, and we may be in a long running gunicorn process, so we don't
         # want to add stuff to sys.path either.)
         grader_module = imp.load_source("grader_module", str(grader_path))
+        self.log.info(f"grader_module - {str(grader_path)}")
+        self.log.info(f"dir grader - {dir(grader_module)}")
         grader = grader_module.grader
 
         # Preprocess for grader-specified errors
