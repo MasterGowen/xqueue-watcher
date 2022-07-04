@@ -145,28 +145,25 @@ class JailedGrader(Grader):
         expected_ok = False
         expected_exc = None
 
-        self.log.info(f"{grader_path} - {processed_answer} -  {seed}")
-        expected_outputs = self._run(grader_path, processed_answer, seed).stdout
-
-
-        try:
+        # try:
             # If we want a factor of two speedup for now: trust the staff solution to
             # avoid hitting the sandbox. (change run to run_trusted)
-            expected_outputs = None  # in case run_trusted raises an exception.
-            expected_outputs = self._run(grader_path, processed_answer, seed).stdout
-            if expected_outputs:
-                expected = json.loads(expected_outputs.decode('utf-8'))
-                expected_ok = True
-        except Exception:
-            expected_exc = sys.exc_info()
-        else:
+        expected_outputs = None  # in case run_trusted raises an exception.
+        expected_outputs = self._run(grader_path, processed_answer, seed).stdout
+        self.log.info(f"expected_outputs - {expected_outputs}")
+        if expected_outputs:
+            expected = json.loads(expected_outputs.decode('utf-8'))
+            expected_ok = True
+        # except Exception:
+        #     expected_exc = sys.exc_info()
+        # else:
             # We just ran the official answer, nothing should have gone wrong, so check
             # everything, and note it as bad if anything is wrong.
-            if expected_ok:
-                if expected['exceptions'] \
-                        or expected['grader']['status'] != 'ok' \
-                        or expected['submission']['status'] != 'ok':
-                    expected_ok = False
+        if expected_ok:
+            if expected['exceptions'] \
+                    or expected['grader']['status'] != 'ok' \
+                    or expected['submission']['status'] != 'ok':
+                expected_ok = False
 
         if not expected_ok:
             # We couldn't run the official answer properly, bail out, but don't show
