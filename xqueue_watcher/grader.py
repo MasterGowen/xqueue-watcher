@@ -117,6 +117,7 @@ class Grader:
 
             # Delivery from the lms
             body = json.loads(body)
+            self.log.info(f"{body}")
             student_response = body['student_response']
             payload = body['grader_payload']
             try:
